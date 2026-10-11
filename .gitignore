@@ -1,0 +1,9 @@
+# never commit keys
+.env
+work/
+__pycache__/
+.venv/
+*.pyc
+.entire/
+traces/
+node_modules/

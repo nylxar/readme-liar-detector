@@ -1,0 +1,1 @@
+print("golden app ok")
