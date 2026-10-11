@@ -4,6 +4,8 @@ work/
 __pycache__/
 .venv/
 *.pyc
-.entire/
+.entire/*
+!.entire/settings.json
+!.entire/.gitignore
 traces/
 node_modules/
