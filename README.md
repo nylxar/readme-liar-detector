@@ -18,7 +18,7 @@ Pipeline: `parse (claims.py) → sandbox try (sandbox.py) → link check (links.
 
 - Python 3.13, `uv`
 - WSL/Linux sandbox for runs (never run with secrets on an untrusted host)
-- Optional: LiteLLM key (`MODEL=claude-haiku` default, 1 LLM call per repo)
+- Optional: any OpenAI-compatible LLM API key (`MODEL` default `claude-haiku`, 1 LLM call per repo)
 
 ## Quickstart (isolated)
 
@@ -28,8 +28,8 @@ All runs in WSL, keys only in WSL `.env` (`chmod 600`, gitignored). Never commit
 cp -r readme-liar-detector ~/neathack/
 cd ~/neathack/readme-liar-detector
 uv venv --python 3.13 .venv && uv pip install --python .venv/bin/python -U -r requirements.txt
-printf 'LITELLM_API_KEY=...\n' > .env
-export LITELLM_BASE_URL=https://litellm.vision.aivar.app/v1 MODEL=claude-haiku
+printf 'LLM_API_KEY=...\n' > .env
+export LLM_BASE_URL=https://your-llm-provider/v1 MODEL=claude-haiku
 export LIAR_EXTRA_PATH=/home/you/neathack/opt/node/bin  # Linux-only dir, never /mnt/*
 rm -rf work && mkdir work && cp -r golden work/golden   # fix in copy, keep golden broken
 set -a && . ./.env && set +a
@@ -50,9 +50,9 @@ Check parsing only:
 
 | Var | Purpose | Default |
 | --- | --- | ------- |
-| `LITELLM_API_KEY` | OpenAI-compatible key for the 1-call verdict | `sk-test` fallback (expect `llm-error`) |
-| `LITELLM_BASE_URL` | LLM endpoint | `https://litellm.vision.aivar.app/v1` (example) |
-| `MODEL` | verdict model | `claude-haiku` |
+| `LLM_API_KEY` | OpenAI-compatible key for the 1-call verdict | `sk-test` fallback (expect `llm-error`) |
+| `LLM_BASE_URL` | OpenAI-compatible LLM endpoint | e.g. `https://your-llm-provider/v1` |
+| `MODEL` | verdict model | `claude-haiku` (any model name your provider accepts) |
 | `LIAR_EXTRA_PATH` | one extra sandbox `PATH` dir, must be under `/home/` or `/tmp/` | ignored otherwise |
 
 ## Truth Score
