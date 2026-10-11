@@ -23,6 +23,7 @@
 # 2026-10-11: SECURITY: user pasted real keys into Windows .env.example. Replaced with placeholders. Keys live only in WSL .env (chmod 600). Recommend rotating neatlogs project key after hackathon; LiteLLM key is shared — ask organizers if rotation needed.
 # 2026-10-11: Node v22.19.0 in WSL ~/neathack/opt (no sudo). Golden reworked: package.json seed -> missing scripts/seed.js (real MODULE_NOT_FOUND fail).
 # 2026-10-11: Built fix.py (deterministic code-fix, no LLM) + links.py (stdlib HEAD/GET). BEFORE score 50 traced, fix scaffolded scripts/seed.js, AFTER score 100 traced. LLM verdicts 25/25 docs-fix (stricter than executor — demo material).
+# 2026-10-11: GitHub nylxar/readme-liar-detector held stale WSL junk (main). Force-pushed Windows master (996dca4), default branch -> master, deleted main. Secret scan 0 hits. Entire sync pending (up to ~1h).
 # Cost table (fill from dashboard trace stats):
 # | run | tokens in/out | $ | latency | score |
 # | before (fail) | ? | ? | ? | 50 |
