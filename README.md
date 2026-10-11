@@ -9,16 +9,16 @@ Pipeline: `parse (claims.py) → sandbox try (sandbox.py) → link check (links.
 - `src/agent/claims.py` — extracts commands (fenced bash + inline `npm`/`pip`/`python`/`node`), backticked env keys, ports, links. Caps: 10 commands, 20 env keys, 10 ports/links.
 - `src/agent/sandbox.py` — isolated runner: clean env (`PATH`/`HOME`/`CI` only), 60s timeout, `cwd` = repo copy. `LIAR_EXTRA_PATH` may prepend one Linux-only dir under `/home/` or `/tmp/` (e.g. node). Never passes host secrets.
 - `src/agent/links.py` — stdlib HEAD→GET reachability check, 10s timeout. No LLM, no secrets sent.
-- `src/agent/run.py` — verify loop + one LLM call (`docs-fix` | `code-fix` | `ok` + score/reason). Traced with neatlogs `readme-verify` workflow + `sandbox_run` tool spans when `NEATLOGS_API_KEY` is set.
+- `src/agent/run.py` — verify loop + one LLM call (`docs-fix` | `code-fix` | `ok` + score/reason).
 - `src/agent/fix.py` — deterministic code-fix, no LLM: if `npm run <s>` maps to `node <file>` in `package.json` and `<file>` is missing, scaffolds a minimal stub (path-guarded to workdir), then re-runs and rescores.
 - `golden/` — planted-lie fixture (`npm run seed` → missing `scripts/seed.js`, wrong env key/port, dead link). Keep broken; copy before fixing.
-- `traces/README.md` — before/after neatlogs trace evidence. `work/` — gitignored fix scratch.
+- `traces/README.md` — before/after run evidence. `work/` — gitignored fix scratch.
 
 ## Requirements
 
 - Python 3.13, `uv`
 - WSL/Linux sandbox for runs (never run with secrets on an untrusted host)
-- Optional: neatlogs project API key (top one, not `nlw_`), LiteLLM key (`MODEL=claude-haiku` default, 1 LLM call per repo)
+- Optional: LiteLLM key (`MODEL=claude-haiku` default, 1 LLM call per repo)
 
 ## Quickstart (isolated)
 
@@ -28,7 +28,7 @@ All runs in WSL, keys only in WSL `.env` (`chmod 600`, gitignored). Never commit
 cp -r readme-liar-detector ~/neathack/
 cd ~/neathack/readme-liar-detector
 uv venv --python 3.13 .venv && uv pip install --python .venv/bin/python -U -r requirements.txt
-printf 'NEATLOGS_API_KEY=...\nLITELLM_API_KEY=...\n' > .env
+printf 'LITELLM_API_KEY=...\n' > .env
 export LITELLM_BASE_URL=https://litellm.vision.aivar.app/v1 MODEL=claude-haiku
 export LIAR_EXTRA_PATH=/home/you/neathack/opt/node/bin  # Linux-only dir, never /mnt/*
 rm -rf work && mkdir work && cp -r golden work/golden   # fix in copy, keep golden broken
@@ -38,7 +38,7 @@ set -a && . ./.env && set +a
 .venv/bin/python src/agent/run.py work/golden/README.md --workdir work/golden > /tmp/after.json
 ```
 
-Without keys, `run.py` still works: prints `WARN: NEATLOGS_API_KEY missing, running untraced` and uses a heuristic score (`100 * passed / total`).
+Without keys, `run.py` still works with a heuristic score (`100 * passed / total`).
 
 Check parsing only:
 
@@ -50,13 +50,10 @@ Check parsing only:
 
 | Var | Purpose | Default |
 | --- | --- | ------- |
-| `NEATLOGS_API_KEY` | neatlogs project key (not `nlw_`); enables traced run | unset = untraced |
 | `LITELLM_API_KEY` | OpenAI-compatible key for the 1-call verdict | `sk-test` fallback (expect `llm-error`) |
 | `LITELLM_BASE_URL` | LLM endpoint | `https://litellm.vision.aivar.app/v1` (example) |
 | `MODEL` | verdict model | `claude-haiku` |
 | `LIAR_EXTRA_PATH` | one extra sandbox `PATH` dir, must be under `/home/` or `/tmp/` | ignored otherwise |
-
-Verify tracing setup: `python -m neatlogs doctor --probe` (want `TRACE_VISIBLE` + `TRACE_FINALIZED` PASS).
 
 ## Truth Score
 
