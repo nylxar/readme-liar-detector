@@ -2,8 +2,8 @@
 Trace every run with neatlogs (init + wrap + flush). Keep LLM calls <=3/repo for $20 budget.
 Usage (in WSL archlinux, isolated from host creds):
   pip install -U -r requirements.txt
-  export NEATLOGS_API_KEY=... LITELLM_API_KEY=...
-  export LITELLM_BASE_URL=https://litellm.vision.aivar.app/v1 MODEL=claude-haiku
+  export LLM_API_KEY=...
+  export LLM_BASE_URL=https://your-llm-provider/v1 MODEL=claude-haiku
   python -m neatlogs doctor --local --json
   python -m neatlogs doctor --probe --json
   python src/agent/run.py golden/README.md --workdir golden
@@ -44,8 +44,8 @@ def get_client():
         workflow_name="readme-verify",
     )
     from openai import OpenAI
-    base = os.environ.get("LITELLM_BASE_URL") or None
-    okey = os.environ.get("LITELLM_API_KEY") or "sk-test"
+    base = os.environ.get("LLM_BASE_URL") or os.environ.get("LITELLM_BASE_URL") or None
+    okey = os.environ.get("LLM_API_KEY") or os.environ.get("LITELLM_API_KEY") or "sk-test"
     client = OpenAI(api_key=okey, base_url=base) if base else OpenAI(api_key=okey)
     return neatlogs.wrap(client)
 
