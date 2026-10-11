@@ -71,3 +71,5 @@ Check parsing only:
 - No Docker; WSL env isolation + timeout only.
 - `fix.py` v1 handles only the missing-`node`-file case; other lies (wrong env key, wrong port, dead link) are reported, not auto-fixed.
 - Shared LLM budget: keep calls ≤1 per repo run (`fix.py` uses zero).
+
+Made by nylxar during neathack.
