@@ -25,6 +25,7 @@
 # 2026-10-11: Built fix.py (deterministic code-fix, no LLM) + links.py (stdlib HEAD/GET). BEFORE score 50 traced, fix scaffolded scripts/seed.js, AFTER score 100 traced. LLM verdicts 25/25 docs-fix (stricter than executor — demo material).
 # 2026-10-11: GitHub nylxar/readme-liar-detector held stale WSL junk (main). Force-pushed Windows master (996dca4), default branch -> master, deleted main. Secret scan 0 hits. Entire sync pending (up to ~1h).
 # 2026-10-12: Real-target test on curium-core (Rust): found parser ran rust blocks as shell (fixed: language-aware blocks), link regex captured code junk (fixed + rstrip), missing toolchain counted as lie (fixed: env_missing exclusion). Node via LIAR_EXTRA_PATH; Rust 1.99 via rustup minimal. cargo check default features: PASS.
+# 2026-10-12: Windows root cause for 0 sessions: sh.exe not on PATH (plugin spawns sh -c per event). Added Git\bin to user PATH. Entire CLI present at .local\bin. Retrying checkpoint via opencode v1.19.0 session.
 # Cost table (fill from dashboard trace stats):
 # | run | tokens in/out | $ | latency | score |
 # | before (fail) | ? | ? | ? | 50 |
