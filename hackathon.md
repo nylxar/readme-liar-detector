@@ -26,6 +26,7 @@
 # 2026-10-11: GitHub nylxar/readme-liar-detector held stale WSL junk (main). Force-pushed Windows master (996dca4), default branch -> master, deleted main. Secret scan 0 hits. Entire sync pending (up to ~1h).
 # 2026-10-12: Real-target test on curium-core (Rust): found parser ran rust blocks as shell (fixed: language-aware blocks), link regex captured code junk (fixed + rstrip), missing toolchain counted as lie (fixed: env_missing exclusion). Node via LIAR_EXTRA_PATH; Rust 1.99 via rustup minimal. cargo check default features: PASS.
 # 2026-10-12: BREAKTHROUGH: v1 session ses_ed0c6a recording (sh fix worked). Relinking.
+# 2026-10-12: CHECKPOINT #1: ses_ed0c6afd via opencode v1.19.0 session (sh-PATH fix made events flow). Ref entire/b2a7d19-e3b0c4 pushed. Link: https://entire.io/gh/nylxar/readme-liar-detector/commit/02553de3f586c732a7a602cd1cedf784adff72c6
 # Cost table (fill from dashboard trace stats):
 # | run | tokens in/out | $ | latency | score |
 # | before (fail) | ? | ? | ? | 50 |
