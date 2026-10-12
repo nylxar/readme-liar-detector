@@ -24,6 +24,8 @@
 # 2026-10-11: Node v22.19.0 in WSL ~/neathack/opt (no sudo). Golden reworked: package.json seed -> missing scripts/seed.js (real MODULE_NOT_FOUND fail).
 # 2026-10-11: Built fix.py (deterministic code-fix, no LLM) + links.py (stdlib HEAD/GET). BEFORE score 50 traced, fix scaffolded scripts/seed.js, AFTER score 100 traced. LLM verdicts 25/25 docs-fix (stricter than executor — demo material).
 # 2026-10-11: GitHub nylxar/readme-liar-detector held stale WSL junk (main). Force-pushed Windows master (996dca4), default branch -> master, deleted main. Secret scan 0 hits. Entire sync pending (up to ~1h).
+# 2026-10-12: Checkpoints still 0 after full matrix: manual hooks (no transcript without plugin events), session attach (opencode export parse fails), checkpoint create (v2 SQLite not found by 0.11.4 lookup even with data-dir symlink). Entire 0.11.4 is latest. Root cause is Entire-side: stale opencode template + no v2 transcript support. Escalated to Discord.
+# Cost table (fill from dashboard trace stats):
 # Cost table (fill from dashboard trace stats):
 # | run | tokens in/out | $ | latency | score |
 # | before (fail) | ? | ? | ? | 50 |
