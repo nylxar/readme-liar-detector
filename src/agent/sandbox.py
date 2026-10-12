@@ -1,7 +1,8 @@
 """Isolated command runner. MUST run in WSL/EC2, never on host with secrets.
 - timeout 60s, clean env, cwd=target repo copy only, no host PATH.
-- LIAR_EXTRA_PATH may prepend ONE Linux-only dir (node, etc). It must live
-  under /home/ or /tmp; anything else is ignored. Never set it to /mnt/*.
+- LIAR_EXTRA_PATH may prepend ONE Linux/macOS-only dir (node, etc). It must
+  live under /home/, /tmp/, or /Users/; anything else is ignored. Never set
+  it to /mnt/*.
 """
 import os
 import subprocess
@@ -10,8 +11,9 @@ _BASE_PATH = "/usr/bin:/bin"
 
 
 def _sandbox_path() -> str:
-    extra = os.environ.get("LIAR_EXTRA_PATH", "")
-    if extra and os.path.isdir(extra) and (extra.startswith("/home/") or extra.startswith("/tmp/")):
+    extra = os.environ.get("LIAR_EXTRA_PATH", "").rstrip("/")
+    allowed = extra in ("/tmp", "/home", "/Users") or extra.startswith(("/home/", "/tmp/", "/Users/"))
+    if extra and os.path.isdir(extra or "/") and allowed:
         return extra + ":" + _BASE_PATH
     return _BASE_PATH
 
