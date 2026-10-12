@@ -1,0 +1,13 @@
+# never commit keys
+.env
+work/
+__pycache__/
+.venv/
+*.pyc
+.entire/*
+!.entire/settings.json
+!.entire/.gitignore
+!.entire/graph-agent.md
+traces/*
+!traces/README.md
+node_modules/
