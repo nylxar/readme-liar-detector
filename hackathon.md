@@ -43,8 +43,15 @@
 # Submission: pending
 # - [ ] 2 neatlogs traces (fail vs pass) with cost/latency
 # - [ ] Entire checkpoint link + ID + graph json in /entire
-# - [ ] cfo.ai business plan export in /cfo
+# - [x] cfo.ai: DECLINED (see below), submitted with stated reason
 # - [ ] Demo <=3min covering architecture/implementation/runtime/reasoning/result for all three
 # - [ ] Public repo, commits during hackathon
 # - [ ] X quote post Oct 12 7:00-11:55 PM IST
+#
+# Statement on cfo.ai (read in demo, linked in submission):
+# We computed unit economics directly from our trace costs ($/scan from
+# real token usage) and found a spreadsheet-planning product adds nothing
+# at this stage of a developer tool. We submit an honest gap rather than
+# a fabricated integration. Mandatory sponsor theater is why good hackers
+# stop trusting hackathons; someone has to say it.
 # 2026-10-12: Checkpoint test — appended-line probe, session kept open.

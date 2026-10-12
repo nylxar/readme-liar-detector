@@ -14,11 +14,12 @@
 - Show probe trace row (TRACE_VISIBLE + TRACE_FINALIZED) briefly.
 - Card with the 3 numbers (tokens, $, latency) before vs after.
 
-## Clip 3 — Entire + cfo.ai (60s)
+## Clip 3 — Entire + honest scope (60s)
 - Terminal: `entire graph search` top hit verify_with_llm (file:line).
 - Browser: checkpoint link (ses_ed0c6afd) + `entire/` graph JSONs in repo.
-- Browser: cfo.ai sheet — price floor, margin, runway. Caption (honest):
-  "cfo.ai prices the scan; traces supply the true unit cost."
+- Card (read verbatim, 15s): "cfo.ai: declined. We priced the scan from our own
+  trace costs; a planning spreadsheet adds nothing at this stage. An honest gap
+  beats a fabricated integration."
 - End card: repo URL + "Truth Score: trust, verified."
 
 ## Build
