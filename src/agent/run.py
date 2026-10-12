@@ -73,10 +73,15 @@ def verify_with_llm(client, model: str, claims: dict, results: list) -> str:
 def run_all(readme: str, workdir: str, client, model: str) -> dict:
     claims = parse_readme(readme)
     results = [run_claim(c, cwd=workdir) for c in claims["commands"]]
-    passed = sum(1 for r in results if r["ok"])
-    score = int(100 * passed / max(1, len(results)))
+    # env-missing (absent toolchain) is unverifiable, not a lie: exclude it.
+    verifiable = [r for r in results if "env_missing" not in r]
+    passed = sum(1 for r in verifiable if r["ok"])
+    # No verifiable claims (e.g. README with no runnable commands and full
+    # toolchain present elsewhere): null, not 0. 0 would cry "all lies".
+    score = int(100 * passed / len(verifiable)) if verifiable else None
     verdict = verify_with_llm(client, model, claims, results) if results else "no-commands"
     return {"claims": claims, "results": results, "score": score,
+            "env_missing": sorted({r["env_missing"] for r in results if "env_missing" in r}),
             "link_checks": check_links(claims["links"]), "verdict": verdict}
 
 
@@ -89,10 +94,12 @@ if HAS_NEATLOGS:
     def traced_run(readme: str, workdir: str, client, model: str) -> dict:
         claims = parse_readme(readme)
         results = [traced_claim(c, workdir) for c in claims["commands"]]
-        passed = sum(1 for r in results if r["ok"])
-        score = int(100 * passed / max(1, len(results)))
+        verifiable = [r for r in results if "env_missing" not in r]
+        passed = sum(1 for r in verifiable if r["ok"])
+        score = int(100 * passed / len(verifiable)) if verifiable else None
         verdict = verify_with_llm(client, model, claims, results) if results else "no-commands"
         return {"claims": claims, "results": results, "score": score,
+                "env_missing": sorted({r["env_missing"] for r in results if "env_missing" in r}),
                 "link_checks": check_links(claims["links"]), "verdict": verdict}
 
 

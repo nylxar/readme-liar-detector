@@ -2,15 +2,20 @@
 import re
 from pathlib import Path
 
-CMD_RE = re.compile(r"```(?:bash|sh|shell)?\n(.*?)```", re.S)
+CMD_RE = re.compile(r"```(\w*)\n(.*?)```", re.S)
+SHELL_LANGS = {"", "bash", "sh", "shell", "console", "text", "plaintext", "terminal", "zsh"}
 INLINE_RE = re.compile(r"`(npm run [^`]+|npm install|pip install[^`]*|python[^`]*|node[^`]+)`")
 ENV_RE = re.compile(r"\b([A-Z][A-Z0-9_]{3,})\b")
 PORT_RE = re.compile(r"(?::|port\s+|localhost:)(\d{2,5})", re.I)
-LINK_RE = re.compile(r"https?://[^\s\)\]]+")
+LINK_RE = re.compile(r"https?://[^\s\]\)\"'(]+")
 
 def parse_readme(path: str | Path) -> dict:
     text = Path(path).read_text(encoding="utf-8", errors="ignore")
-    blocks = [m.group(1) for m in CMD_RE.finditer(text)]
+    # Only shell-tagged (or untagged) blocks are executable commands.
+    # rust/python/etc. blocks are usage samples, never run.
+    blocks = [m.group(2) for m in CMD_RE.finditer(text)
+              if (m.group(1) or "").lower() in SHELL_LANGS]
+    code_blocks = [m.group(2) for m in CMD_RE.finditer(text)]
     cmds = []
     for b in blocks:
         for line in b.splitlines():
@@ -23,14 +28,14 @@ def parse_readme(path: str | Path) -> dict:
             cmds.append(c)
     # Backticked ALL_CAPS tokens are code (env keys); prose stays out.
     ticked = re.findall(r"`([A-Z][A-Z0-9_]{3,})`", text)
-    # Env keys only from code (blocks + inline), never prose: avoids
+    # Env keys only from code (all blocks + inline), never prose: avoids
     # false positives like NOT/ONLY/PATH from sentences.
-    code_text = "\n".join(blocks + inline + ticked)
+    code_text = "\n".join(code_blocks + inline + ticked)
     return {
         "commands": cmds[:10],  # cap for $20 budget / time
         "env_keys": sorted(set(ENV_RE.findall(code_text)))[:20],
         "ports": sorted(set(PORT_RE.findall(text)))[:10],
-        "links": sorted(set(LINK_RE.findall(text)))[:10],
+        "links": sorted({u.rstrip(".,;:!?)") for u in LINK_RE.findall(text)})[:10],
     }
 
 if __name__ == "__main__":

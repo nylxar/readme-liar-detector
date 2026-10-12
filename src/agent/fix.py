@@ -70,12 +70,14 @@ def main() -> None:
             fixes.append(made)
 
     results = [run_claim(c, cwd=args.workdir) for c in before["claims"]["commands"]]
-    passed = sum(1 for r in results if r["ok"])
+    verifiable = [r for r in results if "env_missing" not in r]
+    passed = sum(1 for r in verifiable if r["ok"])
+    score_after = int(100 * passed / len(verifiable)) if verifiable else None
     out = {
         "fixes": fixes,
         "results": results,
         "score_before": before["score"],
-        "score_after": int(100 * passed / max(1, len(results))),
+        "score_after": score_after,
     }
     print(json.dumps(out, indent=2))
 
