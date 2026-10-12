@@ -1,2 +1,2 @@
-neatlogs[openai]
+neatlogs[openai]>=1.4
 openai

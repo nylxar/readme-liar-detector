@@ -16,9 +16,11 @@ Pipeline: `parse (claims.py) → sandbox try (sandbox.py) → link check (links.
 
 ## Requirements
 
-- Python 3.13, `uv`
-- WSL/Linux sandbox for runs (never run with secrets on an untrusted host)
-- Optional: any OpenAI-compatible LLM API key (`MODEL` default `claude-haiku`, 1 LLM call per repo)
+- OS: Linux, macOS, or WSL. No Docker, no cloud, no opencode needed.
+- Python 3.10–3.13 + `pip` (`uv` works too, shown below).
+- WSL/Linux sandbox recommended for runs (never run with secrets on an untrusted host).
+- Target toolchains only as needed: `node` for npm repos, `cargo` for Rust, etc. Missing toolchains are reported as `env_missing`, never scored as lies.
+- Optional: any OpenAI-compatible LLM API key (`MODEL` default `claude-haiku`, 1 LLM call per repo).
 
 ## Quickstart (isolated)
 
@@ -38,7 +40,8 @@ set -a && . ./.env && set +a
 .venv/bin/python src/agent/run.py work/golden/README.md --workdir work/golden > /tmp/after.json
 ```
 
-Without keys, `run.py` still works with a heuristic score (`100 * passed / total`).
+Without keys, `run.py` still works: heuristic score over verifiable commands
+(absent toolchains excluded; `null` when nothing is verifiable).
 
 Check parsing only:
 
@@ -57,7 +60,7 @@ Check parsing only:
 
 ## Truth Score
 
-`score = 100 * passed_commands / total_commands`. Golden fixture: before = 50 (`npm run seed` fails with `MODULE_NOT_FOUND`), after fix scaffolds `scripts/seed.js` → 100. The LLM verdict is stricter than the executor (e.g. may say `docs-fix` score 25 when commands pass but env/port/link claims are wrong) — that gap is intentional demo material.
+`score = 100 * passed_commands / verifiable_commands` (`null` if none verifiable; absent toolchains excluded, never counted as lies). Golden fixture: before = 50 (`npm run seed` fails with `MODULE_NOT_FOUND`), after fix scaffolds `scripts/seed.js` → 100. The LLM verdict is stricter than the executor (e.g. may say `docs-fix` score 25 when commands pass but env/port/link claims are wrong) — that gap is intentional demo material.
 
 ## Sandbox safety
 
