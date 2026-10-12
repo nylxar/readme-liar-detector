@@ -46,3 +46,4 @@
 # - [ ] Demo <=3min covering architecture/implementation/runtime/reasoning/result for all three
 # - [ ] Public repo, commits during hackathon
 # - [ ] X quote post Oct 12 7:00-11:55 PM IST
+# 2026-10-12: Checkpoint test — appended-line probe, session kept open.
