@@ -1,0 +1,6 @@
+entire graph stats
+  repo:     /mnt/c/Users/lader/Projects/readme-liar-detector
+  sessions: not found (looked in /home/nylxar/.claude/projects/-mnt-c-Users-lader-Projects-readme-liar-detector)
+
+No coding-agent session transcripts exist for this repo yet, so there is
+nothing to compare. Run some work with `entire graph search` and re-run this.

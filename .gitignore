@@ -7,6 +7,7 @@ __pycache__/
 .entire/*
 !.entire/settings.json
 !.entire/.gitignore
+!.entire/graph-agent.md
 traces/*
 !traces/README.md
 node_modules/
