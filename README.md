@@ -22,6 +22,17 @@ Pipeline: `parse (claims.py) → sandbox try (sandbox.py) → link check (links.
 - Target toolchains only as needed: `node` for npm repos, `cargo` for Rust, etc. Missing toolchains are reported as `env_missing`, never scored as lies.
 - Optional: any OpenAI-compatible LLM API key (`MODEL` default `claude-haiku`, 1 LLM call per repo).
 
+## Quickstart: one command
+
+```bash
+.venv/bin/python src/agent/liar.py work/golden/README.md --workdir work/golden
+# BEFORE score=50 fixes=['scripts/seed.js'] AFTER score=100
+```
+
+`liar.py` = verify → fix → re-verify in one call (exit 0 when final score is
+100 or `null`). Needs: repo copy in `--workdir`, keys in env for traced LLM
+verdict (works untraced + heuristic without), target toolchains for real runs.
+
 ## Quickstart (isolated)
 
 All runs in WSL, keys only in WSL `.env` (`chmod 600`, gitignored). Never commit real keys; `.env.example` holds placeholders.
