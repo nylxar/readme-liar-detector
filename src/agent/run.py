@@ -26,9 +26,26 @@ except ImportError:
     HAS_NEATLOGS = False
 
 
+def _load_dotenv() -> None:
+    """Load .env from CWD only (never committed, gitignored). Real env wins."""
+    try:
+        with open(".env", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                k, v = line.split("=", 1)
+                k, v = k.strip(), v.strip().strip("'\"")
+                if k and k not in os.environ:
+                    os.environ[k] = v
+    except OSError:
+        pass
+
+
 def get_client():
     if not HAS_NEATLOGS:
         return None
+    _load_dotenv()
     key = os.environ.get("NEATLOGS_API_KEY", "")
     if not key or key.startswith("paste-"):
         print("WARN: NEATLOGS_API_KEY missing, running untraced.", file=sys.stderr)
