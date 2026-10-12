@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Liar Detector in one command: verify -> fix -> re-verify, print the story.
 Usage (keys via env; without keys: heuristic, untraced):
   .venv/bin/python src/agent/liar.py work/golden/README.md --workdir work/golden
